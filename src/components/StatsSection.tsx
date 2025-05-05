@@ -1,6 +1,6 @@
 
-import { Chart } from "@/components/ui/chart";
-import { Bin, Factory, Recycle } from "lucide-react";
+import { Chart as RechartsChart } from "@/components/ui/chart";
+import { Trash, Factory, Recycle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const StatsSection = () => {
@@ -56,7 +56,7 @@ const StatsSection = () => {
                 <CardTitle className="text-sm font-medium">
                   Total Waste Collected
                 </CardTitle>
-                <Bin className="h-4 w-4 text-green-600" />
+                <Trash className="h-4 w-4 text-green-600" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">23,450 kg</div>
@@ -103,7 +103,7 @@ const StatsSection = () => {
               <p>Monthly data showing our progress in waste collection and reuse efforts.</p>
             </div>
             <div className="mt-5 h-80">
-              <Chart 
+              <RechartsChart 
                 type="bar"
                 data={chartData}
                 index="name"

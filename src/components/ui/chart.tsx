@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
@@ -353,6 +354,200 @@ function getPayloadConfigFromPayload(
     : config[key as keyof typeof config]
 }
 
+// Create a Chart component that accepts the props we need
+interface ChartProps {
+  type: "bar" | "line" | "area" | "pie" | "scatter" | "radar" | "radial-bar";
+  data: any[];
+  index: string;
+  categories: string[];
+  colors?: string[];
+  valueFormatter?: (value: number) => string;
+  yAxisWidth?: number;
+  showLegend?: boolean;
+  showXAxis?: boolean;
+  showYAxis?: boolean;
+  showGrid?: boolean;
+  showTooltip?: boolean;
+  className?: string;
+}
+
+const Chart = React.forwardRef<HTMLDivElement, ChartProps>(
+  ({ 
+    type, 
+    data, 
+    index, 
+    categories, 
+    colors = ["#2563eb", "#16a34a"], 
+    valueFormatter, 
+    yAxisWidth = 40,
+    showLegend = true,
+    showXAxis = true,
+    showYAxis = true,
+    showGrid = true,
+    showTooltip = true,
+    className,
+    ...props 
+  }, ref) => {
+    // Create a config object for each category
+    const config: ChartConfig = {};
+    categories.forEach((category, i) => {
+      config[category] = {
+        label: category,
+        color: colors[i % colors.length]
+      };
+    });
+
+    return (
+      <ChartContainer ref={ref} className={className} config={config} {...props}>
+        {type === "bar" && (
+          <RechartsPrimitive.BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            {showGrid && (
+              <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+            )}
+            {showXAxis && (
+              <RechartsPrimitive.XAxis 
+                dataKey={index} 
+                scale="band" 
+              />
+            )}
+            {showYAxis && (
+              <RechartsPrimitive.YAxis 
+                width={yAxisWidth}
+                tickFormatter={valueFormatter}
+              />
+            )}
+            {showTooltip && (
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                formatter={valueFormatter}
+              />
+            )}
+            {showLegend && (
+              <RechartsPrimitive.Legend 
+                content={<ChartLegendContent />}
+              />
+            )}
+            {categories.map((category, i) => (
+              <RechartsPrimitive.Bar 
+                key={category}
+                dataKey={category} 
+                fill={colors[i % colors.length]}
+              />
+            ))}
+          </RechartsPrimitive.BarChart>
+        )}
+        {type === "line" && (
+          <RechartsPrimitive.LineChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            {showGrid && (
+              <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+            )}
+            {showXAxis && (
+              <RechartsPrimitive.XAxis 
+                dataKey={index} 
+              />
+            )}
+            {showYAxis && (
+              <RechartsPrimitive.YAxis 
+                width={yAxisWidth}
+                tickFormatter={valueFormatter}
+              />
+            )}
+            {showTooltip && (
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                formatter={valueFormatter}
+              />
+            )}
+            {showLegend && (
+              <RechartsPrimitive.Legend 
+                content={<ChartLegendContent />}
+              />
+            )}
+            {categories.map((category, i) => (
+              <RechartsPrimitive.Line 
+                key={category}
+                type="monotone" 
+                dataKey={category} 
+                stroke={colors[i % colors.length]}
+              />
+            ))}
+          </RechartsPrimitive.LineChart>
+        )}
+        {type === "area" && (
+          <RechartsPrimitive.AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            {showGrid && (
+              <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+            )}
+            {showXAxis && (
+              <RechartsPrimitive.XAxis 
+                dataKey={index} 
+              />
+            )}
+            {showYAxis && (
+              <RechartsPrimitive.YAxis 
+                width={yAxisWidth}
+                tickFormatter={valueFormatter}
+              />
+            )}
+            {showTooltip && (
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                formatter={valueFormatter}
+              />
+            )}
+            {showLegend && (
+              <RechartsPrimitive.Legend 
+                content={<ChartLegendContent />}
+              />
+            )}
+            {categories.map((category, i) => (
+              <RechartsPrimitive.Area 
+                key={category}
+                type="monotone" 
+                dataKey={category} 
+                fill={colors[i % colors.length]}
+                stroke={colors[i % colors.length]}
+              />
+            ))}
+          </RechartsPrimitive.AreaChart>
+        )}
+        {type === "pie" && (
+          <RechartsPrimitive.PieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            {showTooltip && (
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                formatter={valueFormatter}
+              />
+            )}
+            {showLegend && (
+              <RechartsPrimitive.Legend 
+                content={<ChartLegendContent />}
+              />
+            )}
+            <RechartsPrimitive.Pie
+              data={data}
+              nameKey={index}
+              dataKey={categories[0]}
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              fill={colors[0]}
+            >
+              {data.map((entry, i) => (
+                <RechartsPrimitive.Cell 
+                  key={`cell-${i}`} 
+                  fill={colors[i % colors.length]} 
+                />
+              ))}
+            </RechartsPrimitive.Pie>
+          </RechartsPrimitive.PieChart>
+        )}
+      </ChartContainer>
+    );
+  }
+);
+Chart.displayName = "Chart";
+
 export {
   ChartContainer,
   ChartTooltip,
@@ -360,4 +555,5 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  Chart
 }

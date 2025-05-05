@@ -1,8 +1,7 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Chart } from "@/components/ui/chart";
+import { Chart as RechartsChart } from "@/components/ui/chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 
@@ -186,7 +185,7 @@ const Impact = () => {
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Monthly Waste Diversion & Carbon Savings</h3>
                     <div className="h-80">
-                      <Chart 
+                      <RechartsChart 
                         type="bar"
                         data={environmentalData}
                         index="month"
@@ -201,7 +200,7 @@ const Impact = () => {
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Market Waste Composition</h3>
                     <div className="h-80">
-                      <Chart 
+                      <RechartsChart 
                         type="pie"
                         data={wasteCompositionData}
                         index="name"
@@ -254,7 +253,7 @@ const Impact = () => {
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Jobs Created & Revenue Generated</h3>
                     <div className="h-80">
-                      <Chart 
+                      <RechartsChart 
                         type="bar"
                         data={economicData}
                         index="quarter"
